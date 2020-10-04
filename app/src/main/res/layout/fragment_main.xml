@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Fragments.MainFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="txtLogo"
+            android:textColor="@color/text"
+            android:textSize="30sp"
+            tools:text="Longbox2 Placeholder" />
+
+        <ImageView
+            android:id="@+id/btnMainAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:contentDescription="@string/mainAdd"
+            android:src="@drawable/btn_add_comic"
+            app:srcCompat="@drawable/btn_add_comic"
+            tools:srcCompat="@drawable/btn_add_comic" />
+
+        <ImageView
+            android:id="@+id/btnMainView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:contentDescription="@string/mainView"
+            android:src="@drawable/btn_view_collection"
+            app:srcCompat="@drawable/btn_view_collection"
+            tools:srcCompat="@drawable/btn_view_collection" />
+
+        <ImageView
+            android:id="@+id/btnMainSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:contentDescription="@string/mainSearch"
+            android:src="@drawable/btn_search"
+            app:srcCompat="@drawable/btn_search"
+            tools:srcCompat="@drawable/btn_search" />
+
+        <ImageView
+            android:id="@+id/btnMainWishlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:contentDescription="@string/mainWishlist"
+            android:src="@drawable/btn_wishlist"
+            app:srcCompat="@drawable/btn_wishlist"
+            tools:srcCompat="@drawable/btn_wishlist" />
+
+        <ImageView
+            android:id="@+id/btnMainWeekly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:contentDescription="@string/mainWeekly"
+            android:src="@drawable/btn_weekly"
+            app:srcCompat="@drawable/btn_weekly"
+            tools:srcCompat="@drawable/btn_weekly" />
+
+        <ImageView
+            android:id="@+id/btnMainAchievements"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:contentDescription="@string/mainAchievements"
+            android:src="@drawable/btn_achievements"
+            app:srcCompat="@drawable/btn_achievements"
+            tools:srcCompat="@drawable/btn_achievements" />
+
+        <ImageView
+            android:id="@+id/btnMainSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:contentDescription="@string/mainSettings"
+            android:src="@drawable/btn_settings"
+            app:srcCompat="@drawable/btn_settings"
+            tools:srcCompat="@drawable/btn_settings" />
+
+    </LinearLayout>
+</FrameLayout>

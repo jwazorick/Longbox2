@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Longbox2</string>
+
+    <string name="mainAdd">Add Comic Button</string>
+    <string name="mainView">View Collection Button</string>
+    <string name="mainSearch">Search Collection Button</string>
+    <string name="mainWishlist">Your Wishlist Button</string>
+    <string name="mainWeekly">Your Weekly List Button</string>
+    <string name="mainAchievements">Achievements Button</string>
+    <string name="mainSettings">Settings Button</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_publisher">Add New Publisher</string>
+    <string name="add_title">Title:</string>
+    <string name="add_volume">Volume</string>
+    <string name="add_issue">Issue</string>
+    <string name="add_pub">Publisher</string>
+    <string name="add_price">Cover Price</string>
+    <string name="add_condition">Condition</string>
+    <string name="add_format">Format</string>
+    <string name="add_creators">Comic Creators</string>
+    <string name="add_creator_desc">Add Creator</string>
+    <string name="add_picture_desc">Take Picture</string>
+    <string name="add_file_desc">Find File</string>
+    <string name="add_save_desc">Save Comic</string>
+    <string name="add_more_desc">Save And Add More</string>
+    <string name="add_cancel_desc">Cancel</string>
+    <string name="add_title_hint">Title of Comic</string>
+    <string name="add_title_text">Title</string>
+    <string name="add_volume_hint">Comic Volume</string>
+    <string name="add_issue_text">Issue #</string>
+    <string name="add_notes">Notes</string>
+
+    <string name="collection_title">View Your Collection</string>
+    <string name="collection_back">Back</string>
+    <string name="collection_cover">Cover Image</string>
+
+    <string name="view_publisher">Publisher</string>
+    <string name="view_cover_price">Cover Price</string>
+    <string name="view_condition">Condition</string>
+    <string name="view_format">Format</string>
+    <string name="view_cover_image">Comic Cover</string>
+    <string name="view_edit">Edit Button</string>
+    <string name="view_delete">Delete Button</string>
+    <string name="view_home">Home Button</string>
+
+    <string name="search_header">Search Your Collection</string>
+    <string name="search_for">Search For:</string>
+    <string name="search_title">Title</string>
+    <string name="search_publisher">Publisher</string>
+    <string name="search_format">Format</string>
+    <string name="search_creator">Creator</string>
+    <string name="search_button">Search</string>
+    <string name="search_home">Home</string>
+    <string name="search_num_results">Number of Results: </string>
+    <string name="search_no_results">No Results Found</string>
+</resources>

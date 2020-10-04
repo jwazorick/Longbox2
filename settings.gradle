@@ -1,0 +1,2 @@
+rootProject.name='Longbox2'
+include ':app'
