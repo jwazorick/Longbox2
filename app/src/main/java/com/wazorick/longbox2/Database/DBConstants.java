@@ -1,4 +1,4 @@
-package com.example.longbox2.Database;
+package com.wazorick.longbox2.Database;
 
 class DBConstants {
     static String SETTINGS_TABLE = "settings";

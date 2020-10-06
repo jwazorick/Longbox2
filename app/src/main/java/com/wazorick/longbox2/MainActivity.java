@@ -1,4 +1,4 @@
-package com.example.longbox2;
+package com.wazorick.longbox2;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -7,12 +7,13 @@ import androidx.fragment.app.FragmentManager;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.example.longbox2.Fragments.AddComicFragment;
-import com.example.longbox2.Fragments.EditComicFragment;
-import com.example.longbox2.Fragments.MainFragment;
-import com.example.longbox2.Fragments.SearchFragment;
-import com.example.longbox2.Fragments.ViewCollectionFragment;
-import com.example.longbox2.Fragments.ViewComicFragment;
+import com.wazorick.longbox2.R;
+import com.wazorick.longbox2.Fragments.AddComicFragment;
+import com.wazorick.longbox2.Fragments.EditComicFragment;
+import com.wazorick.longbox2.Fragments.MainFragment;
+import com.wazorick.longbox2.Fragments.SearchFragment;
+import com.wazorick.longbox2.Fragments.ViewCollectionFragment;
+import com.wazorick.longbox2.Fragments.ViewComicFragment;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.MainFragmentInteractionListener, AddComicFragment.AddComicFragmentInteractionListener, ViewCollectionFragment.ViewCollectionFragmentInteractionListener,
         ViewComicFragment.ViewComicFragmentInteractionListener, EditComicFragment.EditComicFragmentInteractionListener, SearchFragment.SearchFragmentInteractionListener {

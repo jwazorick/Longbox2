@@ -1,6 +1,6 @@
-package com.example.longbox2.Objects;
+package com.wazorick.longbox2.Objects;
 
-import com.example.longbox2.Enums.PublicationFormat;
+import com.wazorick.longbox2.Enums.PublicationFormat;
 
 import java.util.ArrayList;
 import java.util.List;

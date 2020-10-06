@@ -1,4 +1,4 @@
-package com.example.longbox2.Objects;
+package com.wazorick.longbox2.Objects;
 
 public class Creator {
     private String creatorName;
