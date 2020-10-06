@@ -1,4 +1,4 @@
-package com.example.longbox2.Enums;
+package com.wazorick.longbox2.Enums;
 
 public enum Conditions {
     NEAR_MINT ("Near Mint"),

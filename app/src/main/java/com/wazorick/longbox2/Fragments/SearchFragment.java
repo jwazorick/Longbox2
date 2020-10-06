@@ -1,4 +1,4 @@
-package com.example.longbox2.Fragments;
+package com.wazorick.longbox2.Fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,11 +18,11 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.example.longbox2.Adapters.ViewCollectionAdapter;
-import com.example.longbox2.Database.DBHandler;
-import com.example.longbox2.MainActivity;
-import com.example.longbox2.Objects.Comic;
-import com.example.longbox2.R;
+import com.wazorick.longbox2.Adapters.ViewCollectionAdapter;
+import com.wazorick.longbox2.Database.DBHandler;
+import com.wazorick.longbox2.MainActivity;
+import com.wazorick.longbox2.Objects.Comic;
+import com.wazorick.longbox2.R;
 
 import java.util.ArrayList;
 import java.util.List;

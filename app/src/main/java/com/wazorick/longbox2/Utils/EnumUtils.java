@@ -1,7 +1,7 @@
-package com.example.longbox2.Utils;
+package com.wazorick.longbox2.Utils;
 
-import com.example.longbox2.Enums.Conditions;
-import com.example.longbox2.Enums.PublicationFormat;
+import com.wazorick.longbox2.Enums.Conditions;
+import com.wazorick.longbox2.Enums.PublicationFormat;
 
 import java.util.ArrayList;
 import java.util.List;

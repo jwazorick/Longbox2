@@ -1,4 +1,4 @@
-package com.example.longbox2.Fragments;
+package com.wazorick.longbox2.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.longbox2.MainActivity;
-import com.example.longbox2.R;
+import com.wazorick.longbox2.MainActivity;
+import com.wazorick.longbox2.R;
 
 /**
  * A simple {@link Fragment} subclass.

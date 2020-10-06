@@ -1,4 +1,4 @@
-package com.example.longbox2.Adapters;
+package com.wazorick.longbox2.Adapters;
 
 import android.content.Context;
 import android.text.Editable;
@@ -10,8 +10,8 @@ import android.widget.EditText;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.longbox2.Objects.Creator;
-import com.example.longbox2.R;
+import com.wazorick.longbox2.Objects.Creator;
+import com.wazorick.longbox2.R;
 
 import java.util.List;
 

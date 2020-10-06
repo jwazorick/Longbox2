@@ -1,4 +1,4 @@
-package com.example.longbox2.Fragments;
+package com.wazorick.longbox2.Fragments;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,14 +21,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.longbox2.Adapters.AddCreatorAdapter;
-import com.example.longbox2.Database.DBHandler;
-import com.example.longbox2.MainActivity;
-import com.example.longbox2.Objects.Comic;
-import com.example.longbox2.Objects.Creator;
-import com.example.longbox2.R;
-import com.example.longbox2.Utils.EnumUtils;
-import com.example.longbox2.Utils.LongboxConstants;
+import com.wazorick.longbox2.Adapters.AddCreatorAdapter;
+import com.wazorick.longbox2.Database.DBHandler;
+import com.wazorick.longbox2.MainActivity;
+import com.wazorick.longbox2.Objects.Comic;
+import com.wazorick.longbox2.Objects.Creator;
+import com.wazorick.longbox2.R;
+import com.wazorick.longbox2.Utils.EnumUtils;
+import com.wazorick.longbox2.Utils.LongboxConstants;
 
 import java.util.ArrayList;
 import java.util.List;

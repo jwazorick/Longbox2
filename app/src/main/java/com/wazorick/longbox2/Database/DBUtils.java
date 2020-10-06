@@ -1,11 +1,11 @@
-package com.example.longbox2.Database;
+package com.wazorick.longbox2.Database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.example.longbox2.Objects.Comic;
-import com.example.longbox2.Objects.Creator;
-import com.example.longbox2.Utils.EnumUtils;
+import com.wazorick.longbox2.Objects.Comic;
+import com.wazorick.longbox2.Objects.Creator;
+import com.wazorick.longbox2.Utils.EnumUtils;
 
 import java.util.ArrayList;
 import java.util.List;
