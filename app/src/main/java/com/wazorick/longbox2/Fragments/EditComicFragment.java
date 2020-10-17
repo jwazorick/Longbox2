@@ -1,15 +1,24 @@
 package com.wazorick.longbox2.Fragments;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +36,12 @@ import com.wazorick.longbox2.MainActivity;
 import com.wazorick.longbox2.Objects.Comic;
 import com.wazorick.longbox2.Objects.Creator;
 import com.wazorick.longbox2.R;
+import com.wazorick.longbox2.Utils.CameraHelper;
 import com.wazorick.longbox2.Utils.EnumUtils;
+import com.wazorick.longbox2.Utils.FileUtils;
 import com.wazorick.longbox2.Utils.LongboxConstants;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -68,6 +79,8 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
     private Comic comic;
     private List<Creator> creatorList;
     private String publisher = "";
+    private File cover = null;
+    private Context mContext;
 
     private ArrayAdapter<String> publisherAdapter;
     private ArrayAdapter<String> conditionAdapter;
@@ -165,7 +178,7 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         if(v.getId() == btnEditPicture.getId()) {
             //Take a picture of the cover again
-            //ToDo: This
+            dispatchCameraIntent();
         } else if(v.getId() == btnEditImage.getId()) {
             //Find the picture on the phone
             //ToDo: This
@@ -191,6 +204,7 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
         super.onAttach(context);
         if(context instanceof EditComicFragmentInteractionListener) {
             mListener = (EditComicFragmentInteractionListener) context;
+            mContext = context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -217,6 +231,7 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
         spnEditPublisher.setSelection(publisherAdapter.getPosition(comic.getComicPublisherName()));
         spnEditCondition.setSelection(conditionAdapter.getPosition(comic.getComicConditionText()));
         spnEditFormat.setSelection(formatAdapter.getPosition(comic.getComicFormat().toString()));
+        imgEditCover.setImageBitmap(FileUtils.getCoverImage(comic.getComicCoverImage(), getActivity()));
 
         setupCreatorRecycler();
     }
@@ -225,7 +240,7 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
         List<String> publishers = dbHandler.getAllPublishers();
         publishers.add(LongboxConstants.ADD_PUBLISHER_STRING);
 
-        publisherAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, publishers);
+        publisherAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, publishers);
         publisherAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnEditPublisher.setAdapter(publisherAdapter);
     }
@@ -233,7 +248,7 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
     public void loadConditionSpinner() {
         List<String> conditions = EnumUtils.getAllConditions();
 
-        conditionAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, conditions);
+        conditionAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, conditions);
         conditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnEditCondition.setAdapter(conditionAdapter);
     }
@@ -241,7 +256,7 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
     public void loadFormatSpinner() {
         List<String> formats = EnumUtils.getAllFormats();
 
-        formatAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, formats);
+        formatAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, formats);
         formatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnEditFormat.setAdapter(formatAdapter);
     }
@@ -315,7 +330,6 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
     }
 
     private void updateComic() {
-        //ToDo: Cover image
         comic.setComicPublisherID(-1);
         comic.setComicConditionID(-1);
 
@@ -327,6 +341,7 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
         comic.setComicConditionText(spnEditCondition.getSelectedItem().toString());
         comic.setComicFormat(EnumUtils.getFormatFromString(spnEditFormat.getSelectedItem().toString()));
         comic.setComicNotes(editEditNotes.getText().toString());
+        comic.setComicCoverImage(cover.getName());
 
         comic.setComicCreators(creatorList);
     }
@@ -360,5 +375,51 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
             }
         });
         builder.show();
+    }
+
+    private void dispatchCameraIntent() {
+        //Check for camera permission
+        mainActivity.checkCameraPermission();
+        mainActivity.checkCameraPermission();
+
+        if(ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(getContext(), "Longbox does not have permission to access camera", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(CameraHelper.checkIfCameraAvailable(mContext)) {
+            Intent coverIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if(coverIntent.resolveActivity(mainActivity.getPackageManager()) != null) {
+                try {
+                    cover = CameraHelper.createImage(mContext);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if(cover != null) {
+                    Uri photoUri = FileProvider.getUriForFile(mContext, LongboxConstants.LONGBOX_AUTHORITY, cover);
+                    coverIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    startActivityForResult(coverIntent, LongboxConstants.REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == LongboxConstants.REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            try {
+                //Compress image
+                CameraHelper.compressImage(cover.getAbsolutePath());
+                Uri imageUri = Uri.fromFile(new File(cover.getAbsolutePath()));
+                Bitmap bitmap = BitmapFactory.decodeFile(cover.getAbsolutePath());
+                bitmap = CameraHelper.rotateBitmapIfNecessary(bitmap);
+                CameraHelper.saveImage(bitmap, cover.getAbsolutePath(), getContext());
+                imgEditCover.setImageURI(imageUri);
+                imgEditCover.refreshDrawableState();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

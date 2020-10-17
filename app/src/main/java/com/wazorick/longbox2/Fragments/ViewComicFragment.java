@@ -23,6 +23,7 @@ import com.wazorick.longbox2.MainActivity;
 import com.wazorick.longbox2.Objects.Comic;
 import com.wazorick.longbox2.Objects.Creator;
 import com.wazorick.longbox2.R;
+import com.wazorick.longbox2.Utils.FileUtils;
 
 import java.util.List;
 
@@ -185,7 +186,7 @@ public class ViewComicFragment extends Fragment implements View.OnClickListener 
         txtViewFormat.setText(comic.getComicFormat().toString());
         txtViewNotes.setText(comic.getComicNotes());
 
-        //ToDo: Cover image
+        imgViewCover.setImageBitmap(FileUtils.getCoverImage(comic.getComicCoverImage(), getActivity()));
 
         loadRecycler(comic.getComicCreators());
 
