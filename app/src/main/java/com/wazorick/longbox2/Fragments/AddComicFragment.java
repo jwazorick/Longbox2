@@ -1,18 +1,26 @@
 package com.wazorick.longbox2.Fragments;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,9 +36,11 @@ import com.wazorick.longbox2.MainActivity;
 import com.wazorick.longbox2.Objects.Comic;
 import com.wazorick.longbox2.Objects.Creator;
 import com.wazorick.longbox2.R;
+import com.wazorick.longbox2.Utils.CameraHelper;
 import com.wazorick.longbox2.Utils.EnumUtils;
 import com.wazorick.longbox2.Utils.LongboxConstants;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +56,7 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
 
     private String mParam1;
     private String mParam2;
+    private Context mContext;
 
     private EditText editAddTitle;
     private EditText editAddVolume;
@@ -56,6 +67,7 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
     private Spinner spnAddFormat;
     private EditText editAddNotes;
     private RecyclerView recyclerAddCreators;
+    private ImageView imgCover;
 
     private ImageView btnAddCreator;
     private ImageView btnAddTakePicture;
@@ -70,12 +82,12 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
     private List<Creator> creatorList;
     private AddCreatorAdapter addCreatorAdapter;
     private String publisher = "";
+    private String currentPhotoPath;
+    private String coverPhotoFileName = "";
 
     private ArrayAdapter<String> pubAdapter;
     private ArrayAdapter<String> conditionAdapter;
     private ArrayAdapter<String> formatAdapter;
-
-    private TextureView.SurfaceTextureListener surfaceTextureListener;
 
     private AddComicFragmentInteractionListener mListener;
 
@@ -124,6 +136,7 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
         spnAddFormat = view.findViewById(R.id.spnAddFormat);
         editAddNotes = view.findViewById(R.id.editAddNotes);
         recyclerAddCreators = view.findViewById(R.id.recyclerAddCreators);
+        imgCover = view.findViewById(R.id.imgCover);
 
         btnAddCreator = view.findViewById(R.id.btnAddCreator);
         btnAddTakePicture = view.findViewById(R.id.btnAddTakePicture);
@@ -197,7 +210,7 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
             }
         } else if(v.getId() == btnAddTakePicture.getId()) {
             //Use camera to take pic of cover
-            //ToDO: Camera interaction
+            dispatchCameraIntent();
         } else if(v.getId() == btnAddFindImage.getId()) {
             //Find a picture stored on the phone
             //ToDO: File navigation
@@ -231,6 +244,7 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mContext = context;
         if (context instanceof AddComicFragmentInteractionListener) {
             mListener = (AddComicFragmentInteractionListener) context;
         } else {
@@ -253,7 +267,7 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
         List<String> publishers = dbHandler.getAllPublishers();
         publishers.add(LongboxConstants.ADD_PUBLISHER_STRING);
 
-        pubAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, publishers);
+        pubAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, publishers);
         pubAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnAddPublisher.setAdapter(pubAdapter);
     }
@@ -261,14 +275,14 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
     private void loadConditionSpinner() {
         List<String> conditions = EnumUtils.getAllConditions();
 
-        conditionAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, conditions);
+        conditionAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, conditions);
         conditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnAddCondition.setAdapter(conditionAdapter);
     }
 
     private void loadFormatSpinner() {
         List<String> formats = EnumUtils.getAllFormats();
-        formatAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, formats);
+        formatAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, formats);
         formatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnAddFormat.setAdapter(formatAdapter);
     }
@@ -352,7 +366,7 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
         comic.setComicConditionText(spnAddCondition.getSelectedItem().toString());
 
         comic.setComicFormat(EnumUtils.getFormatFromString(spnAddFormat.getSelectedItem().toString()));
-        //ToDo: Cover image
+        comic.setComicCoverImage(coverPhotoFileName);
         comic.setComicCreators(addCreatorAdapter.getCreatorList());
 
         comic.setComicNotes(editAddNotes.getText().toString());
@@ -411,5 +425,57 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
             }
         });
         builder.show();
+    }
+
+    private void dispatchCameraIntent() {
+        //Check for camera permission
+        mainActivity.checkCameraPermission();
+        mainActivity.checkCameraPermission();
+
+        if(ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(getContext(), "Longbox does not have permission to access camera", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(CameraHelper.checkIfCameraAvailable(mContext)) {
+            Intent coverIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            MainActivity mainActivity = (MainActivity) getActivity();
+            if(coverIntent.resolveActivity(mainActivity.getPackageManager()) != null) {
+                File cover = null;
+                try {
+                    cover = CameraHelper.createImage(mContext);
+                    currentPhotoPath = cover.getAbsolutePath();
+                    coverPhotoFileName = cover.getName();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if(cover != null) {
+                    Uri photoUri = FileProvider.getUriForFile(mContext, LongboxConstants.LONGBOX_AUTHORITY, cover);
+                    coverIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    startActivityForResult(coverIntent, LongboxConstants.REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //InputStream inputStream = null;
+
+        if(requestCode == LongboxConstants.REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            try {
+                //Compress image
+                CameraHelper.compressImage(currentPhotoPath);
+                Uri imageUri = Uri.fromFile(new File(currentPhotoPath));
+                Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
+                bitmap = CameraHelper.rotateBitmapIfNecessary(bitmap);
+                CameraHelper.saveImage(bitmap, currentPhotoPath, mContext);
+                imgCover.setImageURI(imageUri);
+                imgCover.refreshDrawableState();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

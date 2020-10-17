@@ -8,4 +8,9 @@ public class LongboxConstants {
 
     public static final int MAX_PREVIEW_WIDTH = 1920;
     public static final int MAX_PREVIEW_HEIGHT = 1080;
+
+    public static final String INTENT_COVER_FILENAME = "coverFileName";
+    public static final String INTENT_COVER_LOCATION = "coverLocation";
+
+    public static final String LONGBOX_AUTHORITY = "com.wazorick.longbox2";
 }

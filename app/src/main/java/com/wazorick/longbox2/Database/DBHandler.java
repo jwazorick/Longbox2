@@ -102,6 +102,7 @@ public class DBHandler extends SQLiteOpenHelper {
             comic.setComicTitle(result.getString(result.getColumnIndex(DBConstants.COMIC_TITLE)));
             comic.setComicVolume(result.getString(result.getColumnIndex(DBConstants.COMIC_VOLUME)));
             comic.setComicIssue(result.getString(result.getColumnIndex(DBConstants.COMIC_ISSUE)));
+            comic.setComicCoverImage(result.getString(result.getColumnIndex(DBConstants.COMIC_COVER_IMAGE)));
             comicList.add(comic);
             result.moveToNext();
         }

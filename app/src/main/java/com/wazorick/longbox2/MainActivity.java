@@ -1,9 +1,13 @@
 package com.wazorick.longbox2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -37,6 +41,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
 
     //Buttons created here: https://www.clickminded.com/button-generator/
     //Roboto font, Size 26, 250 width, Fully curved sides, Pyramid gradient, Top and bottom color #15d798, Center color #073763
+
+    public void checkCameraPermission(){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA }, 1);
+        }
+    }
 
     //******************************************************************************************************
     public void loadMainFragment() {

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.wazorick.longbox2.MainActivity;
 import com.wazorick.longbox2.Objects.Comic;
 import com.wazorick.longbox2.R;
+import com.wazorick.longbox2.Utils.FileUtils;
 
 import java.util.List;
 
@@ -69,6 +70,7 @@ public class ViewCollectionAdapter extends RecyclerView.Adapter<ViewCollectionAd
             Bitmap cover = BitmapFactory.decodeFile(comic.getComicCoverImage());
             imgCollectionCover.setImageBitmap(cover);
         }
+        imgCollectionCover.setImageBitmap(FileUtils.getCoverImage(comic.getComicCoverImage(), mainActivity));
         txtCollectionTitle.setText(comic.getComicTitle());
         txtCollectionVolume.setText("Volume: " + comic.getComicVolume());
         txtCollectionIssue.setText("Issue: " + comic.getComicIssue());
