@@ -20,7 +20,7 @@ import com.wazorick.longbox2.Utils.FileUtils;
 import java.util.List;
 
 public class ViewCollectionAdapter extends RecyclerView.Adapter<ViewCollectionAdapter.ViewHolder> {
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgCollectionCover;
         private TextView txtCollectionTitle;
         private TextView txtCollectionVolume;
@@ -53,8 +53,7 @@ public class ViewCollectionAdapter extends RecyclerView.Adapter<ViewCollectionAd
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View collectionView = inflater.inflate(R.layout.recycler_view_collection_row, parent, false);
-        ViewHolder viewHolder = new ViewHolder(collectionView);
-        return viewHolder;
+        return new ViewHolder(collectionView);
     }
 
     @Override
@@ -72,8 +71,8 @@ public class ViewCollectionAdapter extends RecyclerView.Adapter<ViewCollectionAd
         }
         imgCollectionCover.setImageBitmap(FileUtils.getCoverImage(comic.getComicCoverImage(), mainActivity));
         txtCollectionTitle.setText(comic.getComicTitle());
-        txtCollectionVolume.setText("Volume: " + comic.getComicVolume());
-        txtCollectionIssue.setText("Issue: " + comic.getComicIssue());
+        txtCollectionVolume.setText(context.getString(R.string.volume_string, comic.getComicVolume()));
+        txtCollectionIssue.setText(context.getString(R.string.issue_string, comic.getComicIssue()));
 
         layoutCollectionMaster.setOnClickListener(new View.OnClickListener() {
             @Override
