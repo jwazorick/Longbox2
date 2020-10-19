@@ -267,7 +267,7 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
         List<String> publishers = dbHandler.getAllPublishers();
         publishers.add(LongboxConstants.ADD_PUBLISHER_STRING);
 
-        pubAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, publishers);
+        pubAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, publishers);
         pubAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnAddPublisher.setAdapter(pubAdapter);
     }
@@ -275,14 +275,14 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
     private void loadConditionSpinner() {
         List<String> conditions = EnumUtils.getAllConditions();
 
-        conditionAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, conditions);
+        conditionAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, conditions);
         conditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnAddCondition.setAdapter(conditionAdapter);
     }
 
     private void loadFormatSpinner() {
         List<String> formats = EnumUtils.getAllFormats();
-        formatAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, formats);
+        formatAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, formats);
         formatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnAddFormat.setAdapter(formatAdapter);
     }
@@ -440,7 +440,7 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
         if(CameraHelper.checkIfCameraAvailable(mContext)) {
             Intent coverIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             MainActivity mainActivity = (MainActivity) getActivity();
-            if(coverIntent.resolveActivity(mainActivity.getPackageManager()) != null) {
+            if(mainActivity != null && coverIntent.resolveActivity(mainActivity.getPackageManager()) != null) {
                 File cover = null;
                 try {
                     cover = CameraHelper.createImage(mContext);
@@ -470,7 +470,7 @@ public class AddComicFragment extends Fragment implements View.OnClickListener {
                 Uri imageUri = Uri.fromFile(new File(currentPhotoPath));
                 Bitmap bitmap = BitmapFactory.decodeFile(currentPhotoPath);
                 bitmap = CameraHelper.rotateBitmapIfNecessary(bitmap);
-                CameraHelper.saveImage(bitmap, currentPhotoPath, mContext);
+                CameraHelper.saveImage(bitmap, currentPhotoPath);
                 imgCover.setImageURI(imageUri);
                 imgCover.refreshDrawableState();
             } catch (Exception e) {

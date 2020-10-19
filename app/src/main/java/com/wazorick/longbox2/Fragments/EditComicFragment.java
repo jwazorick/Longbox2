@@ -143,6 +143,7 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
 
         dbHandler = new DBHandler(getContext());
         mainActivity = (MainActivity)getActivity();
+        assert mainActivity != null;
         comic = dbHandler.getComicById(mainActivity.ISSUE_ID);
 
         btnEditPicture.setOnClickListener(this);
@@ -240,7 +241,7 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
         List<String> publishers = dbHandler.getAllPublishers();
         publishers.add(LongboxConstants.ADD_PUBLISHER_STRING);
 
-        publisherAdapter = new ArrayAdapter<String>(mContext, android.R.layout.simple_spinner_item, publishers);
+        publisherAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, publishers);
         publisherAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnEditPublisher.setAdapter(publisherAdapter);
     }
@@ -414,7 +415,7 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
                 Uri imageUri = Uri.fromFile(new File(cover.getAbsolutePath()));
                 Bitmap bitmap = BitmapFactory.decodeFile(cover.getAbsolutePath());
                 bitmap = CameraHelper.rotateBitmapIfNecessary(bitmap);
-                CameraHelper.saveImage(bitmap, cover.getAbsolutePath(), getContext());
+                CameraHelper.saveImage(bitmap, cover.getAbsolutePath());
                 imgEditCover.setImageURI(imageUri);
                 imgEditCover.refreshDrawableState();
             } catch (Exception e) {

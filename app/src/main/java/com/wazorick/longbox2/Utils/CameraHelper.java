@@ -8,7 +8,6 @@ import android.graphics.Matrix;
 import android.os.Environment;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.UUID;
@@ -32,7 +31,6 @@ public class CameraHelper {
     public static void compressImage(String imageLocation){
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap bmp = BitmapFactory.decodeFile(imageLocation, options);
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         try {
             int newWidth = Math.round((float) options.outWidth *.20f);
@@ -46,7 +44,7 @@ public class CameraHelper {
         }
     }
 
-    public static boolean saveImage(Bitmap bitmap, String imageLocation, Context context) {
+    public static boolean saveImage(Bitmap bitmap, String imageLocation) {
         try {
             FileOutputStream fs = new FileOutputStream(new File(imageLocation));
             bitmap.compress(Bitmap.CompressFormat.JPEG, 85, fs);

@@ -55,7 +55,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
 
     private MainActivity mainActivity;
     private DBHandler dbHandler;
-    private boolean priorSearch; //ToDo: Determine if I need this
     private List<Comic> comicList;
 
     private SearchFragmentInteractionListener mListener;
@@ -111,7 +110,6 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
 
         mainActivity = (MainActivity)getActivity();
         dbHandler = new DBHandler(getContext());
-        priorSearch = false;
         comicList = new ArrayList<>();
 
         loadRecycler();

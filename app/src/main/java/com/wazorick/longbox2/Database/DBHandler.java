@@ -16,11 +16,9 @@ import java.util.List;
 //ToDo: Convert all raw queries to safe methods
 public class DBHandler extends SQLiteOpenHelper {
     private static final String DBNAME =  "longbox.db";
-    private Context context;
 
     public DBHandler(Context context) {
         super(context, DBNAME, null, 1);
-        this.context = context;
     }
 
     @Override
@@ -121,6 +119,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 DBConstants.CONDITION_TABLE + "." + DBConstants.CONDITION_ID + " where " + DBConstants.COMIC_TABLE + "." + DBConstants.COMIC_ID + " = " + comicId, null);
 
         if(result.getCount() == 0) {
+            result.close();
             return comic;
         }
 
@@ -139,7 +138,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         //Creators
         comic.setComicCreators(getComicCreators(comicId));
-
+        result.close();
         return comic;
     }
 
@@ -156,8 +155,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         result.moveToFirst();
         for(int i = 0; i < result.getCount(); i++) {
-            String publisher = "";
-            publisher = result.getString(result.getColumnIndex(DBConstants.PUBLISHER_NAME));
+            //String publisher = "";
+            String publisher = result.getString(result.getColumnIndex(DBConstants.PUBLISHER_NAME));
             publishers.add(publisher);
             result.moveToNext();
         }
@@ -181,10 +180,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public boolean addComic(Comic comic) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        long comicID = -1;
+        //long comicID = -1;
 
         //Add the comic
-        comicID = addNewComic(comic, db);
+        long comicID = addNewComic(comic, db);
 
         if(comicID == -1) {
             return false;
@@ -315,6 +314,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         result.moveToFirst();
         comicList = DBUtils.generateComicListFromResult(result);
+        creatorResult.close();
         result.close();
         return comicList;
     }
@@ -342,20 +342,22 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //Add a creator
     public long addNewCreator(String creatorName, SQLiteDatabase db) {
-        long creatorID = -1;
+        //long creatorID = -1;
         ContentValues contentValues = DBUtils.createCreatorContentValues(creatorName);
-        creatorID = db.insert(DBConstants.CREATOR_TABLE, null, contentValues);
-        return creatorID;
+        //long creatorID = db.insert(DBConstants.CREATOR_TABLE, null, contentValues);
+        //return creatorID;
+        return db.insert(DBConstants.CREATOR_TABLE, null, contentValues);
     }
 
     //Get all jobs
 
     //Add a job
     public long addNewJob(String jobName, SQLiteDatabase db) {
-        long jobID = -1;
+        //long jobID = -1;
         ContentValues contentValues = DBUtils.createJobContentValues(jobName);
-        jobID = db.insert(DBConstants.JOB_TABLE, null, contentValues);
-        return jobID;
+        //jobID = db.insert(DBConstants.JOB_TABLE, null, contentValues);
+        //return jobID;
+        return db.insert(DBConstants.JOB_TABLE, null, contentValues);
     }
 
     //Add a comic/creator/job entry
@@ -369,6 +371,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 "." + DBConstants.JOB_ID_FK + " where " + DBConstants.CREATOR_JOB_ISSUE_TABLE + "." + DBConstants.COMIC_ID_FK + " = " + comicId, null);
 
         if(result.getCount() == 0) {
+            result.close();
             return creators;
         }
 
@@ -382,7 +385,7 @@ public class DBHandler extends SQLiteOpenHelper {
             creators.add(creator);
             result.moveToNext();
         }
-
+        result.close();
         return creators;
     }
 
@@ -422,30 +425,24 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     private List<Creator> addNewCreators(List<Creator> creatorList) {
-        boolean success = false;
         SQLiteDatabase db = this.getWritableDatabase();
 
         for(int i = 0; i < creatorList.size(); i++) {
             //Check if creator exists
             long creatorID = findExistingCreator(creatorList.get(i).getCreatorName(), db);
-            if(creatorID != -1) {
-                //Found it
-                creatorList.get(i).setCreatorID((int)creatorID);
-            } else {
+            if(creatorID == -1) {
                 //Need to add it
                 creatorID = addNewCreator(creatorList.get(i).getCreatorName(), db);
-                creatorList.get(i).setCreatorID((int)creatorID);
             }
+            creatorList.get(i).setCreatorID((int)creatorID);
 
             //Now do the same for job
             long jobID = findExistingJob(creatorList.get(i).getCreatorJob(), db);
-            if(jobID != -1) {
-                creatorList.get(i).setCreatorJobID((int)jobID);
-            } else {
-                //Need to add it
+            if(jobID == -1) {
+                //Add it
                 jobID = addNewJob(creatorList.get(i).getCreatorJob(), db);
-                creatorList.get(i).setCreatorJobID((int)jobID);
             }
+            creatorList.get(i).setCreatorJobID((int)jobID);
         }
         return creatorList;
     }
