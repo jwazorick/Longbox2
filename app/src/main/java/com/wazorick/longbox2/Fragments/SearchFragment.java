@@ -56,6 +56,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     private MainActivity mainActivity;
     private DBHandler dbHandler;
     private List<Comic> comicList;
+    private Context mContext;
 
     private SearchFragmentInteractionListener mListener;
 
@@ -104,6 +105,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         btnSearchHome = view.findViewById(R.id.btnSearchHome);
         recyclerSearchResults = view.findViewById(R.id.recyclerSearchResults);
         txtSearchNumResults = view.findViewById(R.id.txtSearchNumResults);
+        txtSearchNumResults.setText(mContext.getString(R.string.search_num_results, "0"));
 
         btnSearchHome.setOnClickListener(this);
         btnSearchSearch.setOnClickListener(this);
@@ -136,6 +138,7 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mContext = context;
         if(context instanceof SearchFragmentInteractionListener) {
             mListener = (SearchFragmentInteractionListener) context;
         } else {
@@ -177,9 +180,9 @@ public class SearchFragment extends Fragment implements View.OnClickListener{
         }
 
         if(comicList.size() == 0) {
-            txtSearchNumResults.setText(getResources().getString(R.string.search_no_results));
+            txtSearchNumResults.setText(mContext.getResources().getString(R.string.search_no_results));
         } else {
-            txtSearchNumResults.setText(R.string.search_num_results + comicList.size());
+            txtSearchNumResults.setText(mContext.getString(R.string.search_num_results, Integer.toString(comicList.size())));
         }
 
         loadRecycler();

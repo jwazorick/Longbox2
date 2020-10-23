@@ -52,7 +52,7 @@
     <string name="search_creator">Creator</string>
     <string name="search_button">Search</string>
     <string name="search_home">Home</string>
-    <string name="search_num_results">Number of Results: </string>
+    <string name="search_num_results">Number of Results: %1$s</string>
     <string name="search_no_results">No Results Found</string>
     <string name="title_activity_camera">CameraActivity</string>
     <!-- Strings used for fragments for navigation -->

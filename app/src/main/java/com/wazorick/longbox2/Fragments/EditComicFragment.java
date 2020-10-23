@@ -342,7 +342,10 @@ public class EditComicFragment extends Fragment implements View.OnClickListener 
         comic.setComicConditionText(spnEditCondition.getSelectedItem().toString());
         comic.setComicFormat(EnumUtils.getFormatFromString(spnEditFormat.getSelectedItem().toString()));
         comic.setComicNotes(editEditNotes.getText().toString());
-        comic.setComicCoverImage(cover.getName());
+
+        if(cover != null) {
+            comic.setComicCoverImage(cover.getName());
+        }
 
         comic.setComicCreators(creatorList);
     }
