@@ -1,7 +1,6 @@
 package com.wazorick.longbox2.Adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,10 +65,10 @@ public class ViewCollectionAdapter extends RecyclerView.Adapter<ViewCollectionAd
         LinearLayout layoutCollectionMaster = viewHolder.layoutCollectionMaster;
 
         if(!comic.getComicCoverImage().equalsIgnoreCase("")) {
-            Bitmap cover = BitmapFactory.decodeFile(comic.getComicCoverImage());
-            imgCollectionCover.setImageBitmap(cover);
+            imgCollectionCover.setImageBitmap(FileUtils.getCoverImage(comic.getComicCoverImage(), mainActivity));
+        } else {
+            imgCollectionCover.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.nia));
         }
-        imgCollectionCover.setImageBitmap(FileUtils.getCoverImage(comic.getComicCoverImage(), mainActivity));
         txtCollectionTitle.setText(comic.getComicTitle());
         txtCollectionVolume.setText(context.getString(R.string.volume_string, comic.getComicVolume()));
         txtCollectionIssue.setText(context.getString(R.string.issue_string, comic.getComicIssue()));

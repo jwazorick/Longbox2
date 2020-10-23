@@ -61,4 +61,6 @@ class DBConstants {
     static String WEEKLY_ISSUE = "weeklyissue";
     static String WEEKLY_PUBLISHER = "weeklypublisher";
     static String WEEKLY_DATE_PUBLISHED = "weeklydatepublished";
+
+    static String SEARCH_ORDER_BY = " ORDER BY " + COMIC_TITLE + ", " + COMIC_VOLUME + ", " + COMIC_ISSUE;
 }

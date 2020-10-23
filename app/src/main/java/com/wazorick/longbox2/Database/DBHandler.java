@@ -232,7 +232,7 @@ public class DBHandler extends SQLiteOpenHelper {
         List<Comic> comicList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor result = db.rawQuery("select * from " + DBConstants.COMIC_TABLE + " where " + DBConstants.COMIC_TITLE + " like '%" + title + "%'", null);
+        Cursor result = db.rawQuery("select * from " + DBConstants.COMIC_TABLE + " where " + DBConstants.COMIC_TITLE + " like '%" + title + "%'" + DBConstants.SEARCH_ORDER_BY, null);
         if(result.getCount() == 0) {
             result.close();
             return comicList;
@@ -257,7 +257,7 @@ public class DBHandler extends SQLiteOpenHelper {
         int pubId = pubResult.getInt(pubResult.getColumnIndex(DBConstants.PUBLISHER_ID));
         pubResult.close();
 
-        Cursor result = db.rawQuery("select * from " + DBConstants.COMIC_TABLE + " where " + DBConstants.COMIC_PUBLISHER + " = " + pubId, null);
+        Cursor result = db.rawQuery("select * from " + DBConstants.COMIC_TABLE + " where " + DBConstants.COMIC_PUBLISHER + " = " + pubId + DBConstants.SEARCH_ORDER_BY, null);
         if(result.getCount() == 0) {
             result.close();
             return comicList;
@@ -274,7 +274,7 @@ public class DBHandler extends SQLiteOpenHelper {
         List<Comic> comicList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor result = db.rawQuery("select * from " + DBConstants.COMIC_TABLE + " where " + DBConstants.COMIC_FORMAT + " = '" + format + "'", null);
+        Cursor result = db.rawQuery("select * from " + DBConstants.COMIC_TABLE + " where " + DBConstants.COMIC_FORMAT + " like '%" + format + "%'" + DBConstants.SEARCH_ORDER_BY, null);
         if(result.getCount() == 0) {
             result.close();
             return comicList;
@@ -306,7 +306,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         String whereRange = DBUtils.generateRangeValues(comicIds);
-        Cursor result = db.rawQuery("select * from " + DBConstants.COMIC_TABLE + " where " + DBConstants.COMIC_ID + " in " + whereRange, null);
+        Cursor result = db.rawQuery("select * from " + DBConstants.COMIC_TABLE + " where " + DBConstants.COMIC_ID + " in " + whereRange + DBConstants.SEARCH_ORDER_BY, null);
         if(result.getCount() == 0) {
             result.close();
             return comicList;
