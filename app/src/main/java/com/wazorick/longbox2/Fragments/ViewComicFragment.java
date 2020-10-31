@@ -211,6 +211,7 @@ public class ViewComicFragment extends Fragment implements View.OnClickListener 
 
     private void deleteComic() {
         //Prompt user for confirmation
+        // ToDo: Delete failing
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Delete Comic?");
         builder.setMessage("Are you sure you want to delete this comic? This cannot be undone");
@@ -233,6 +234,7 @@ public class ViewComicFragment extends Fragment implements View.OnClickListener 
                 //Nothing needs to happen here
             }
         });
+        builder.create().show();
     }
 
     private void editComic() {
