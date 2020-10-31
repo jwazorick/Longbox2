@@ -35,8 +35,10 @@ public class EnumUtils {
             return PublicationFormat.HARDCOVER;
         } else if(format.equalsIgnoreCase(PublicationFormat.SOFTCOVER.toString())) {
             return PublicationFormat.SOFTCOVER;
-        } else {
+        } else if(format.equalsIgnoreCase(PublicationFormat.DIGITAL.toString())) {
             return PublicationFormat.DIGITAL;
+        } else {
+            return PublicationFormat.UNKNOWN;
         }
     }
 }

@@ -33,6 +33,7 @@ public class Comic {
         comicConditionID = -1;
         comicNotes = "";
         comicCreators = new ArrayList<>();
+        comicFormat = PublicationFormat.UNKNOWN;
     }
 
     public Comic(int comicID, String comicTitle, String comicIssue, String comicVolume, String comicPublisherName, int comicPublisherID, String comicCoverPrice, String comicCoverImage, String comicConditionText, int comicConditionID, String comicNotes, PublicationFormat comicFormat, List<Creator> comicCreators) {

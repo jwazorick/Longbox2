@@ -8,9 +8,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.wazorick.longbox2.Objects.Comic;
 import com.wazorick.longbox2.Objects.Creator;
+import com.wazorick.longbox2.Objects.WishlistItem;
 import com.wazorick.longbox2.Utils.EnumUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 //ToDo: Convert all raw queries to safe methods
@@ -396,6 +399,116 @@ public class DBHandler extends SQLiteOpenHelper {
         long comicResult = db.delete(DBConstants.COMIC_TABLE, DBConstants.COMIC_ID + " = " + comicId, null);
         long creatorResult = db.delete(DBConstants.CREATOR_JOB_ISSUE_TABLE, DBConstants.COMIC_ID_FK + " = " + comicId, null);
         return comicResult > 0 && creatorResult > 0;
+    }
+
+    //Get all the wishlist items currently stored
+    public List<WishlistItem> getAllWishlistItems() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<WishlistItem> wishlistItems = new ArrayList<>();
+
+        //Get the publisher info for later
+        Cursor publishers = db.rawQuery("select * from " + DBConstants.PUBLISHER_TABLE, null);
+        HashMap<Integer, String> publisherInfo = new HashMap<>();
+        publishers.moveToFirst();
+        while(!publishers.isAfterLast()) {
+            publisherInfo.put(publishers.getInt(publishers.getColumnIndex(DBConstants.PUBLISHER_ID)), publishers.getString(publishers.getColumnIndex(DBConstants.PUBLISHER_NAME)));
+            publishers.moveToNext();
+        }
+        publishers.close();
+
+        Cursor result = db.rawQuery("select * from " + DBConstants.WISHLIST_TABLE + " order by " + DBConstants.WISHLIST_TITLE + ", " + DBConstants.WISHLIST_ISSUE, null);
+
+        if(result.getCount() == 0) {
+            return wishlistItems;
+        }
+
+        result.moveToFirst();
+        while(!result.isAfterLast()) {
+            WishlistItem wishlistItem = new WishlistItem();
+            wishlistItem.setComicTitle(result.getString(result.getColumnIndex(DBConstants.WISHLIST_TITLE)));
+            wishlistItem.setComicIssue(result.getString(result.getColumnIndex(DBConstants.WISHLIST_ISSUE)));
+            wishlistItem.setWishlistPriority(result.getString(result.getColumnIndex(DBConstants.WISHLIST_PRIORITY)));
+            wishlistItem.setWishlistID(result.getInt(result.getColumnIndex(DBConstants.WISHLIST_ID)));
+            wishlistItem.setComicPublisherName(publisherInfo.get(result.getInt(result.getColumnIndex(DBConstants.WISHLIST_PUBLISHER_FK))));
+            wishlistItems.add(wishlistItem);
+            result.moveToNext();
+        }
+
+        result.close();
+        return wishlistItems;
+    }
+
+    //Add a new wishlist item
+    public boolean addWishlistItem(WishlistItem item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBConstants.WISHLIST_TITLE, item.getComicTitle());
+        contentValues.put(DBConstants.WISHLIST_ISSUE, item.getComicIssue());
+        contentValues.put(DBConstants.WISHLIST_PRIORITY, item.getWishlistPriority());
+        contentValues.put(DBConstants.WISHLIST_PUBLISHER_FK, getPublisherID(item.getComicPublisherName(), db));
+
+        long result = db.insert(DBConstants.WISHLIST_TABLE, null, contentValues);
+        return result > 0;
+    }
+
+    //Delete wishlist item(s). Returns true if everything deleted successfully
+    public boolean deleteWishlistItems(List<WishlistItem> wishlistItems) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean failure = false;
+
+        for (WishlistItem item: wishlistItems) {
+            //Delete the item
+            long result = db.delete(DBConstants.WISHLIST_TABLE, DBConstants.WISHLIST_ID + " = " + item.getWishlistID(), null);
+
+            //If it fails, set failure to true
+            if (result < 0) {
+                failure = true;
+            }
+        }
+
+        return !failure;
+    }
+
+    //Update the wishlist item
+    public boolean updateWishlistItem(WishlistItem item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBConstants.WISHLIST_TITLE, item.getComicTitle());
+        contentValues.put(DBConstants.WISHLIST_ISSUE, item.getComicIssue());
+        contentValues.put(DBConstants.WISHLIST_PUBLISHER_FK, getPublisherID(item.getComicPublisherName(), db));
+        contentValues.put(DBConstants.WISHLIST_PRIORITY, item.getWishlistPriority());
+
+        int result = db.update(DBConstants.WISHLIST_TABLE, contentValues, DBConstants.WISHLIST_ID + " = " + item.getWishlistID(), null);
+        return result > 0;
+    }
+
+    //Transfer wishlist item to collection
+    public boolean transferWishlistItems(List<WishlistItem> transferItems) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean failure = false;
+
+        for(WishlistItem item: transferItems) {
+            //ContentValues contentValues = DBUtils.createComicContentValues(item);
+            //Start a transaction
+            try {
+                db.beginTransaction();
+
+                boolean added = addComic(item);
+                boolean deleted = deleteWishlistItems(Collections.singletonList(item));
+
+                if(added && deleted) {
+                    //Both succeeded
+                    db.setTransactionSuccessful();
+                } else {
+                    failure = true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                db.endTransaction();
+            }
+        }
+        return !failure;
     }
 
     //**********************************************************************************************

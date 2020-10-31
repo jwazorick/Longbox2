@@ -61,9 +61,33 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <string name="wishlist_header">Your Wishlist</string>
+    <string name="wishlist_items">Number of items: %1$s</string>
+    <string name="wishlist_add">Add</string>
+    <string name="wishlist_transfer">Transfer to Collection</string>
+    <string name="wishlist_edit">Edit</string>
+    <string name="wishlist_delete">Delete</string>
+    <string name="wishlist_home">Home</string>
+    <string name="wishlist_clear">Clear</string>
+
+    <string name="wishlist_item_title">Title</string>
+    <string name="wishlist_item_issue">Issue</string>
+    <string name="wishlist_item_priority">Priority</string>
+
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <string name="volume_string">Volume: %1$s</string>
     <string name="issue_string">Issue: %1$s</string>
+
+    <string name="dialog_title">Title</string>
+    <string name="dialog_issue">Issue</string>
+    <string name="dialog_publisher">Publisher</string>
+    <string name="dialog_priority">Priority</string>
+
+    <string-array name="Priorities">
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+    </string-array>
 </resources>

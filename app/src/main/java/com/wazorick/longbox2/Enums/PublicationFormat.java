@@ -4,7 +4,8 @@ public enum PublicationFormat {
     DIGITAL ("Digital"),
     SINGLE_ISSUE ("Single Issue"),
     HARDCOVER ("Hardcover"),
-    SOFTCOVER ("Softcover");
+    SOFTCOVER ("Softcover"),
+    UNKNOWN ("Unknown");
 
     //private final String name;
     private final String display;
