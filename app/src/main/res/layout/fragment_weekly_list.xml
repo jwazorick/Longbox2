@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Fragments.WeeklyListFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView31"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/weekly_title"
+            android:textAlignment="center"
+            android:textColor="@color/text"
+            android:textSize="30sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerWeeklyList"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:layout_marginTop="25dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btnWeeklyAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/weekly_add"
+                android:src="@drawable/btn_add"
+                app:srcCompat="@drawable/btn_add"
+                tools:srcCompat="@drawable/btn_add" />
+
+            <ImageView
+                android:id="@+id/btnWeeklyTransfer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/weekly_transfer"
+                android:src="@drawable/button_transfer"
+                app:srcCompat="@drawable/button_transfer"
+                tools:srcCompat="@drawable/button_transfer" />
+
+            <ImageView
+                android:id="@+id/btnWeeklyEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/weekly_edit"
+                android:src="@drawable/btn_edit"
+                app:srcCompat="@drawable/btn_edit"
+                tools:srcCompat="@drawable/btn_edit" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btnWeeklyHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/weekly_home"
+                android:src="@drawable/btn_home2"
+                app:srcCompat="@drawable/btn_home2"
+                tools:srcCompat="@drawable/btn_home2" />
+
+            <ImageView
+                android:id="@+id/btnWeeklyClear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/weekly_clear"
+                android:src="@drawable/button_clear"
+                app:srcCompat="@drawable/button_clear"
+                tools:srcCompat="@drawable/button_clear" />
+
+            <ImageView
+                android:id="@+id/btnWeeklyDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="@string/weekly_delete"
+                android:src="@drawable/btn_delete"
+                app:srcCompat="@drawable/btn_delete"
+                tools:srcCompat="@drawable/btn_delete" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

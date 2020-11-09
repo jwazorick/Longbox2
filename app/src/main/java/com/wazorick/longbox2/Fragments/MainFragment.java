@@ -112,6 +112,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             mainActivity.loadWishlistFragment();
         } else if(v.getId() == btnMainWeekly.getId()) {
             //Go to weekly list fragment
+            mainActivity.loadWeeklyListFragment();
         } else if(v.getId() == btnMainAchievements.getId()) {
             //Go to achievement fragment
         } else if(v.getId() == btnMainSettings.getId()) {
