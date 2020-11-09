@@ -35,4 +35,12 @@ public class ScreenUtils {
     public static void showTransferFailureToast(Context context) {
         Toast.makeText(context, "Not all items transferred. Please try again", Toast.LENGTH_SHORT).show();
     }
+
+    public static void showDeletedSuccessToast(Context context) {
+        Toast.makeText(context, "Items deleted successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showDeleteFailureToast(Context context) {
+        Toast.makeText(context, "Not all items deleted. Please try again", Toast.LENGTH_SHORT).show();
+    }
 }

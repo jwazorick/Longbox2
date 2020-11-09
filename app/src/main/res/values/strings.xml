@@ -84,6 +84,18 @@
     <string name="dialog_issue">Issue</string>
     <string name="dialog_publisher">Publisher</string>
     <string name="dialog_priority">Priority</string>
+    <string name="dialog_date">Date</string>
+
+    <string name="weekly_title">Your Weekly List</string>
+    <string name="weekly_add">Add</string>
+    <string name="weekly_transfer">Transfer</string>
+    <string name="weekly_edit">Edit</string>
+    <string name="weekly_home">Home</string>
+    <string name="weekly_clear">Clear</string>
+    <string name="weekly_delete">Delete</string>
+    <string name="weekly_row_title">Title: %1$s</string>
+    <string name="weekly_row_issue">Issue: %1$s</string>
+    <string name="weekly_row_date">Date: %1$s</string>
 
     <string-array name="Priorities">
         <item>High</item>

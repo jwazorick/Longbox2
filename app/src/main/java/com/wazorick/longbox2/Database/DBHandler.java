@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.wazorick.longbox2.Objects.Comic;
 import com.wazorick.longbox2.Objects.Creator;
+import com.wazorick.longbox2.Objects.WeeklyItem;
 import com.wazorick.longbox2.Objects.WishlistItem;
 import com.wazorick.longbox2.Utils.EnumUtils;
 
@@ -407,14 +408,8 @@ public class DBHandler extends SQLiteOpenHelper {
         List<WishlistItem> wishlistItems = new ArrayList<>();
 
         //Get the publisher info for later
-        Cursor publishers = db.rawQuery("select * from " + DBConstants.PUBLISHER_TABLE, null);
-        HashMap<Integer, String> publisherInfo = new HashMap<>();
-        publishers.moveToFirst();
-        while(!publishers.isAfterLast()) {
-            publisherInfo.put(publishers.getInt(publishers.getColumnIndex(DBConstants.PUBLISHER_ID)), publishers.getString(publishers.getColumnIndex(DBConstants.PUBLISHER_NAME)));
-            publishers.moveToNext();
-        }
-        publishers.close();
+        //ToDo: test this again
+        HashMap<Integer, String> publisherInfo = getPublisherHashMap(db);
 
         Cursor result = db.rawQuery("select * from " + DBConstants.WISHLIST_TABLE + " order by " + DBConstants.WISHLIST_TITLE + ", " + DBConstants.WISHLIST_ISSUE, null);
 
@@ -488,7 +483,6 @@ public class DBHandler extends SQLiteOpenHelper {
         boolean failure = false;
 
         for(WishlistItem item: transferItems) {
-            //ContentValues contentValues = DBUtils.createComicContentValues(item);
             //Start a transaction
             try {
                 db.beginTransaction();
@@ -498,6 +492,91 @@ public class DBHandler extends SQLiteOpenHelper {
 
                 if(added && deleted) {
                     //Both succeeded
+                    db.setTransactionSuccessful();
+                } else {
+                    failure = true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                db.endTransaction();
+            }
+        }
+        return !failure;
+    }
+
+    //Get all Weekly List items
+    public List<WeeklyItem> getAllWeeklyListItems() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<WeeklyItem> weeklyItems = new ArrayList<>();
+
+        Cursor result = db.rawQuery("select * from " + DBConstants.WEEKLY_LIST_TABLE + " order by " + DBConstants.WEEKLY_DATE_PUBLISHED + ", " + DBConstants.WEEKLY_TITLE + ", " + DBConstants.WEEKLY_ISSUE, null);
+        if(result.getCount() == 0) {
+            return weeklyItems;
+        }
+
+        HashMap<Integer, String> publisherInfo = getPublisherHashMap(db);
+
+        result.moveToFirst();
+        while(!result.isAfterLast()) {
+            WeeklyItem item = new WeeklyItem();
+            item.setComicTitle(result.getString(result.getColumnIndex(DBConstants.WEEKLY_TITLE)));
+            item.setComicIssue(result.getString(result.getColumnIndex(DBConstants.WEEKLY_ISSUE)));
+            item.setWeeklyId(result.getInt(result.getColumnIndex(DBConstants.WEEKLY_ID)));
+            item.setComicPublisherName(publisherInfo.get(result.getInt(result.getColumnIndex(DBConstants.WEEKLY_PUBLISHER))));
+            item.setDatePublished(result.getLong(result.getColumnIndex(DBConstants.WEEKLY_DATE_PUBLISHED)));
+            weeklyItems.add(item);
+            result.moveToNext();
+        }
+
+        result.close();
+        return weeklyItems;
+    }
+
+    //Add a new weekly item
+    public boolean addWeeklyItem(WeeklyItem item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        //ContentValues contentValues = new ContentValues();
+        ContentValues contentValues = DBUtils.createWeeklyListContentValues(item);
+
+        long result = db.insert(DBConstants.WEEKLY_LIST_TABLE, null, contentValues);
+        return result > 0;
+    }
+
+    public boolean updateWeeklyItem(WeeklyItem item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = DBUtils.createWeeklyListContentValues(item);
+        int result = db.update(DBConstants.WEEKLY_LIST_TABLE, contentValues, DBConstants.WEEKLY_ID + " = " + item.getWeeklyId(), null);
+        return result > 0;
+    }
+
+    public boolean deleteWeeklyListItems(List<WeeklyItem> weeklyItems) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean failure = false;
+
+        for(WeeklyItem item: weeklyItems) {
+            long result = db.delete(DBConstants.WEEKLY_LIST_TABLE, DBConstants.WEEKLY_ID + " = " + item.getWeeklyId(), null);
+
+            //If it fails, set failure to true
+            if (result < 0) {
+                failure = true;
+            }
+        }
+        return !failure;
+    }
+
+    public boolean transferWeeklyItems(List<WeeklyItem> selectedItems) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean failure = false;
+
+        for(WeeklyItem item: selectedItems) {
+            try {
+                db.beginTransaction();
+
+                boolean added = addComic(item);
+                boolean deleted = deleteWeeklyListItems(Collections.singletonList(item));
+
+                if(added && deleted) {
                     db.setTransactionSuccessful();
                 } else {
                     failure = true;
@@ -592,5 +671,17 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues contentValues = DBUtils.createIssueJobContentValues(creator, comicID);
 
         return db.insert(DBConstants.CREATOR_JOB_ISSUE_TABLE, null, contentValues);
+    }
+
+    private HashMap<Integer, String> getPublisherHashMap(SQLiteDatabase db) {
+        Cursor publishers = db.rawQuery("select * from " + DBConstants.PUBLISHER_TABLE, null);
+        HashMap<Integer, String> publisherInfo = new HashMap<>();
+        publishers.moveToFirst();
+        while(!publishers.isAfterLast()) {
+            publisherInfo.put(publishers.getInt(publishers.getColumnIndex(DBConstants.PUBLISHER_ID)), publishers.getString(publishers.getColumnIndex(DBConstants.PUBLISHER_NAME)));
+            publishers.moveToNext();
+        }
+        publishers.close();
+        return publisherInfo;
     }
 }

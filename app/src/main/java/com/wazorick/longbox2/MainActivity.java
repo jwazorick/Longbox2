@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.wazorick.longbox2.Fragments.WeeklyListFragment;
 import com.wazorick.longbox2.Fragments.WishlistFragment;
 import com.wazorick.longbox2.R;
 import com.wazorick.longbox2.Fragments.AddComicFragment;
@@ -21,7 +22,8 @@ import com.wazorick.longbox2.Fragments.ViewCollectionFragment;
 import com.wazorick.longbox2.Fragments.ViewComicFragment;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.MainFragmentInteractionListener, AddComicFragment.AddComicFragmentInteractionListener, ViewCollectionFragment.ViewCollectionFragmentInteractionListener,
-        ViewComicFragment.ViewComicFragmentInteractionListener, EditComicFragment.EditComicFragmentInteractionListener, SearchFragment.SearchFragmentInteractionListener, WishlistFragment.WishlistFragmentInteractionListener {
+        ViewComicFragment.ViewComicFragmentInteractionListener, EditComicFragment.EditComicFragmentInteractionListener, SearchFragment.SearchFragmentInteractionListener, WishlistFragment.WishlistFragmentInteractionListener,
+        WeeklyListFragment.WeeklyListFragmentInteractionListener {
 
     public int ISSUE_ID = -1;
     public int VIEW_COLLECTION_SCROLL_TO = 0;
@@ -85,6 +87,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
         this.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, wishlistFragment).addToBackStack(null).commit();
     }
 
+    public void loadWeeklyListFragment() {
+        WeeklyListFragment weeklyListFragment = new WeeklyListFragment();
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, weeklyListFragment).addToBackStack(null).commit();
+    }
+
     //******************************************************************************************************
     @Override
     public void onMainFragmentInteraction(Uri uri) {
@@ -118,6 +125,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
 
     @Override
     public void onWishlistFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onWeeklyListFragmentInteraction(Uri uri) {
 
     }
 }

@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import com.wazorick.longbox2.Objects.Comic;
 import com.wazorick.longbox2.Objects.Creator;
+import com.wazorick.longbox2.Objects.WeeklyItem;
 import com.wazorick.longbox2.Utils.EnumUtils;
 
 import java.util.ArrayList;
@@ -79,6 +80,15 @@ class DBUtils {
         }
         range += ")";
         return range;
+    }
+
+    public static ContentValues createWeeklyListContentValues(WeeklyItem item) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBConstants.WEEKLY_TITLE, item.getComicTitle());
+        contentValues.put(DBConstants.WEEKLY_ISSUE, item.getComicIssue());
+        contentValues.put(DBConstants.WEEKLY_PUBLISHER, item.getComicPublisherName());
+        contentValues.put(DBConstants.WEEKLY_DATE_PUBLISHED, item.getDatePublished());
+        return contentValues;
     }
 
 }
