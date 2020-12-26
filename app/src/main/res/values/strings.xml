@@ -97,6 +97,11 @@
     <string name="weekly_row_issue">Issue: %1$s</string>
     <string name="weekly_row_date">Date: %1$s</string>
 
+    <string name="achievement_title">Achievements</string>
+    <string name="achievement_name">Name:</string>
+    <string name="achievement_status">Status:</string>
+    <string name="achievement_description">Description:</string>
+
     <string-array name="Priorities">
         <item>High</item>
         <item>Medium</item>
