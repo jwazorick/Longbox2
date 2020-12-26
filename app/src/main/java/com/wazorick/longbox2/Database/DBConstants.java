@@ -47,6 +47,9 @@ class DBConstants {
     static String ACHIEVEMENT_UNLOCKED = "achievementunlocked";
     static String ACHIEVEMENT_IMAGE = "achievementimage";
     static String ACHIEVEMENT_DATE = "achievementdate";
+    static String ACHIEVEMENT_DESC = "achievementdesc";
+    static String ACHIEVEMENT_TOTAL = "achievementtotal";
+    static String ACHIEVEMENT_PROGRESS = "achievementprogress";
 
     static String WISHLIST_TABLE = "wishlist";
     static String WISHLIST_ID = "_wishlistid";

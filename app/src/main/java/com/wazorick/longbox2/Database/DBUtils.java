@@ -91,4 +91,15 @@ class DBUtils {
         return contentValues;
     }
 
+    public static ContentValues createAchievementContentValues(String achievementName, String achievementDescription, String achievementImage, int achievementTotal) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBConstants.ACHIEVEMENT_NAME, achievementName);
+        contentValues.put(DBConstants.ACHIEVEMENT_IMAGE, achievementImage);
+        contentValues.put(DBConstants.ACHIEVEMENT_DESC, achievementDescription);
+        contentValues.put(DBConstants.ACHIEVEMENT_UNLOCKED, 0);
+        contentValues.put(DBConstants.ACHIEVEMENT_DATE, -1);
+        contentValues.put(DBConstants.ACHIEVEMENT_PROGRESS, 0);
+        contentValues.put(DBConstants.ACHIEVEMENT_TOTAL, achievementTotal);
+        return contentValues;
+    }
 }

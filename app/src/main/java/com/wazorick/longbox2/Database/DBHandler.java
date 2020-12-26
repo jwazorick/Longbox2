@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.wazorick.longbox2.Objects.Achievement;
 import com.wazorick.longbox2.Objects.Comic;
 import com.wazorick.longbox2.Objects.Creator;
 import com.wazorick.longbox2.Objects.WeeklyItem;
@@ -54,7 +55,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         //Achievement table
         db.execSQL("create table " + DBConstants.ACHIEVEMENT_TABLE + " (" + DBConstants.ACHIEVEMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DBConstants.ACHIEVEMENT_NAME + " TEXT, " + DBConstants.ACHIEVEMENT_IMAGE +
-                " TEXT, " + DBConstants.ACHIEVEMENT_UNLOCKED + " NUMERIC, " + DBConstants.ACHIEVEMENT_DATE + " INTEGER)");
+                " TEXT, " + DBConstants.ACHIEVEMENT_UNLOCKED + " NUMERIC, " + DBConstants.ACHIEVEMENT_DATE + " INTEGER, " + DBConstants.ACHIEVEMENT_DESC + " TEXT, " + DBConstants.ACHIEVEMENT_TOTAL + " INTEGER, " +
+                DBConstants.ACHIEVEMENT_PROGRESS + " INTEGER)");
 
         //Wishlist table
         db.execSQL("create table " + DBConstants.WISHLIST_TABLE + " (" + DBConstants.WISHLIST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DBConstants.WISHLIST_TITLE + " TEXT, " + DBConstants.WISHLIST_ISSUE +
@@ -64,8 +66,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("create table " + DBConstants.WEEKLY_LIST_TABLE + " (" + DBConstants.WEEKLY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DBConstants.WEEKLY_TITLE + " TEXT, " + DBConstants.WEEKLY_ISSUE +
                 " TEXT, " + DBConstants.WEEKLY_PUBLISHER + " INTEGER, " + DBConstants.WEEKLY_DATE_PUBLISHED + " INTEGER)");
 
-        //ToDo: Load Settings, Condition, Achievement tables
         loadInitialPublishers(db);
+        loadAchievements(db);
     }
 
     @Override
@@ -81,6 +83,70 @@ public class DBHandler extends SQLiteOpenHelper {
 
         db.insert(DBConstants.PUBLISHER_TABLE, null, dc);
         db.insert(DBConstants.PUBLISHER_TABLE, null, marvel);
+    }
+
+    private void loadAchievements(SQLiteDatabase db) {
+        ContentValues beginner = DBUtils.createAchievementContentValues("Beginner Collector", "Add 10 comics to your collection", "badge_beginner", 10);
+        ContentValues seasoned = DBUtils.createAchievementContentValues("Seasoned Collector", "Add 100 comics to your collection", "badge_seasoned", 100);
+        ContentValues superCollector = DBUtils.createAchievementContentValues("Super Collector", "Add 500 comics to your collection", "badge_super", 500);
+        ContentValues ultra = DBUtils.createAchievementContentValues("Ultra Collector", "Add 1000 comics to your collection", "badge_ultra", 1000);
+        ContentValues mega = DBUtils.createAchievementContentValues("Mega Collector", "Add 5000 comics to your collection", "badge_mega", 5000);
+        ContentValues bigTwo = DBUtils.createAchievementContentValues("The Big Two", "Have at least 50 comics from Marvel and DC each", "badge_bigtwo", 100);
+        ContentValues wellRounded = DBUtils.createAchievementContentValues("Well Rounded Collection", "Have at least 25 comics from 6 different publishers", "badge_wellrounded", 150);
+        ContentValues batFan = DBUtils.createAchievementContentValues("Bat Fan", "Add 200 Batman and Batman-related comics", "badge_batman", 200);
+        ContentValues ironFan = DBUtils.createAchievementContentValues("I Am Iron Fan", "Add 200 Ironman and Ironman-related comics", "badge_ironman", 200);
+        ContentValues superFan = DBUtils.createAchievementContentValues("Super Fan", "Add 200 Superman and Superman-related comics", "badge_superman", 200);
+        ContentValues realAmerican = DBUtils.createAchievementContentValues("Real American", "Add 200 Captain America comics to your collection", "badge_captainamerica", 200);
+        ContentValues spiderFan = DBUtils.createAchievementContentValues("Spider-Fan", "Add 200 Spiderman and Spiderman-related comics to your collection", "badge_spiderman", 200);
+        ContentValues greenLantern = DBUtils.createAchievementContentValues("Green Lantern", "Add 200 Green Lantern and Green Lantersn-related comics to your collection", "badge_greenlantern", 200);
+        ContentValues fantasticFan = DBUtils.createAchievementContentValues("Fan-tastic Fan", "Add 200 Fantastic Four and Fantastic Four related comics to your collection", "badge_fantasticfour", 200);
+        ContentValues xFan = DBUtils.createAchievementContentValues("X-Fan", "Add 200 X-Men and X-Men related comics to your collection", "badge_xmen", 200);
+        ContentValues whereNoFan = DBUtils.createAchievementContentValues("Where No Fan Has Gone Before", "Add 200 Star Trek items to your collection", "badge_startrek", 200);
+        ContentValues holocron = DBUtils.createAchievementContentValues("Enough To Fill a Holocron", "Add 200 Star Wars items to your collection", "badge_starwars", 200);
+        ContentValues fandom = DBUtils.createAchievementContentValues("Fandom Fan", "Add 100 Star Wars and Star Trek items each to your collection", "badge_fandom", 100);
+        ContentValues giFan = DBUtils.createAchievementContentValues("G.I. Fan", "Add 100 G.I. Joe itesm to your collection", "badge_gijoe", 100);
+        ContentValues speedReader = DBUtils.createAchievementContentValues("Speed Reader", "Add 200 Flash comics to your collection", "badge_flash", 200);
+        ContentValues hulkedOut = DBUtils.createAchievementContentValues("Hulked Out", "Add 200 Hulk and Hulk-related comics to your collection", "badge_hulk", 200);
+        ContentValues fullQuiver = DBUtils.createAchievementContentValues("Full Quiver", "Add 200 Green Arrow or Hawkeye comics to your collection", "badge_arrow", 200);
+        ContentValues deadTree = DBUtils.createAchievementContentValues("Dead Tree Reader", "Add 500 physical items to your collection", "badge_tree", 500);
+        ContentValues digital = DBUtils.createAchievementContentValues("Digital Maven", "Add 500 digital items to your collection", "badge_digital", 500);
+        ContentValues powerConverter = DBUtils.createAchievementContentValues("Power Converter", "Convert 100 Weekly List items to your collection", "badge_converter", 100);
+        ContentValues wishMaster = DBUtils.createAchievementContentValues("Wish Master", "Convert 50 Wishlist items to your collection", "badge_wish", 50);
+
+        db.beginTransaction();
+        try {
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, beginner);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, seasoned);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, superCollector);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, ultra);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, mega);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, bigTwo);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, wellRounded);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, batFan);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, ironFan);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, superFan);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, realAmerican);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, spiderFan);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, greenLantern);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, fantasticFan);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, xFan);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, whereNoFan);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, holocron);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, fandom);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, giFan);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, speedReader);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, hulkedOut);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, fullQuiver);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, deadTree);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, digital);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, powerConverter);
+            db.insert(DBConstants.ACHIEVEMENT_TABLE, null, wishMaster);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     //Get all comics in the collection, specifically for the View Collection fragment
@@ -588,6 +654,36 @@ public class DBHandler extends SQLiteOpenHelper {
             }
         }
         return !failure;
+    }
+
+    public List<Achievement> getAllOrderedAchievements() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Achievement> achievements = new ArrayList<>();
+
+        Cursor result = db.rawQuery("select * from " + DBConstants.ACHIEVEMENT_TABLE + " ORDER BY " + DBConstants.ACHIEVEMENT_UNLOCKED + " DESC", null);
+
+        if(result.getCount() == 0) {
+            result.close();
+            return achievements;
+        }
+
+        result.moveToFirst();
+        while(!result.isAfterLast()) {
+            Achievement cheevo = new Achievement();
+            cheevo.setAchievementID(result.getInt(result.getColumnIndex(DBConstants.ACHIEVEMENT_ID)));
+            cheevo.setAchievementName(result.getString(result.getColumnIndex(DBConstants.ACHIEVEMENT_NAME)));
+            cheevo.setAchievementImage(result.getString(result.getColumnIndex(DBConstants.ACHIEVEMENT_IMAGE)));
+            cheevo.setAchievementUnlocked(result.getInt(result.getColumnIndex(DBConstants.ACHIEVEMENT_UNLOCKED)) == 1);
+            cheevo.setAchievementDateUnlocked(result.getLong(result.getColumnIndex(DBConstants.ACHIEVEMENT_DATE)));
+            cheevo.setAchievementDescription(result.getString(result.getColumnIndex(DBConstants.ACHIEVEMENT_DESC)));
+            cheevo.setTotal(result.getInt(result.getColumnIndex(DBConstants.ACHIEVEMENT_TOTAL)));
+            cheevo.setProgress(result.getInt(result.getColumnIndex(DBConstants.ACHIEVEMENT_PROGRESS)));
+            achievements.add(cheevo);
+            result.moveToNext();
+        }
+
+        result.close();
+        return achievements;
     }
 
     //**********************************************************************************************

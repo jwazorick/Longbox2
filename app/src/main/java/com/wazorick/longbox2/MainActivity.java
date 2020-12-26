@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.wazorick.longbox2.Fragments.AchievementFragment;
 import com.wazorick.longbox2.Fragments.WeeklyListFragment;
 import com.wazorick.longbox2.Fragments.WishlistFragment;
 import com.wazorick.longbox2.R;
@@ -23,7 +24,7 @@ import com.wazorick.longbox2.Fragments.ViewComicFragment;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.MainFragmentInteractionListener, AddComicFragment.AddComicFragmentInteractionListener, ViewCollectionFragment.ViewCollectionFragmentInteractionListener,
         ViewComicFragment.ViewComicFragmentInteractionListener, EditComicFragment.EditComicFragmentInteractionListener, SearchFragment.SearchFragmentInteractionListener, WishlistFragment.WishlistFragmentInteractionListener,
-        WeeklyListFragment.WeeklyListFragmentInteractionListener {
+        WeeklyListFragment.WeeklyListFragmentInteractionListener, AchievementFragment.AchievementFragmentInteractionListener {
 
     public int ISSUE_ID = -1;
     public int VIEW_COLLECTION_SCROLL_TO = 0;
@@ -92,6 +93,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
         this.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, weeklyListFragment).addToBackStack(null).commit();
     }
 
+    public void loadAchievementFragment() {
+        AchievementFragment achievementFragment = new AchievementFragment();
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer, achievementFragment).addToBackStack(null).commit();
+    }
+
     //******************************************************************************************************
     @Override
     public void onMainFragmentInteraction(Uri uri) {
@@ -130,6 +136,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Main
 
     @Override
     public void onWeeklyListFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onAchievementFragmentInteraction(Uri uri) {
 
     }
 }
